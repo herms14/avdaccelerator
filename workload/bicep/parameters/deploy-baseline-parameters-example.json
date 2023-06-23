@@ -42,13 +42,13 @@
             "value": "Group"
         },       
         "avdIdentityDomainName": {
-            "value": ""
+            "value": "<<IdentityDomainName>>"
         },
         "avdDomainJoinUserName": {
-            "value": ""
+            "value": "none"
         },
         "avdDomainJoinUserPassword": {
-            "value": ""
+            "value": "none"
         },
         "avdOuPath": {
             "value": ""
@@ -80,7 +80,10 @@
         "createAvdVnet": {
             "value": true
         },
-        "existingVnetSubnetResourceId": {
+        "existingVnetAvdSubnetResourceId": {
+            "value": ""
+        },
+        "existingVnetPrivateEndpointSubnetResourceId": {
             "value": ""
         },
         "existingHubVnetResourceId": {
@@ -89,14 +92,17 @@
         "avdVnetworkAddressPrefixes": {
             "value": "10.10.0.0/23"
         },
-        "avdVnetworkSubnetAddressPrefix": {
-            "value": "10.10.0.0/23"
+        "vNetworkAvdSubnetAddressPrefix": {
+            "value": "10.10.0.0/24"
+        },
+        "vNetworkPrivateEndpointSubnetAddressPrefix": {
+            "value": "10.10.1.0/27"
         },
         "customDnsIps": {
-            "value": "none"
+            "value": ""
         },
-        "avdVnetPrivateDnsZone": {
-            "value": true
+        "createPrivateDnsZones": {
+            "value": false
         },
         "avdVnetPrivateDnsZoneFilesId": {
             "value": "<<PrivateDnsZoneFilesId>>"
@@ -110,7 +116,13 @@
         "createAvdFslogixDeployment": {
             "value": true
         },
-        "avdFslogixFileShareQuotaSize": {
+        "createMsixDeployment": {
+            "value": false
+        },
+        "fslogixFileShareQuotaSize": {
+            "value": 10
+        },
+        "msixFileShareQuotaSize": {
             "value": 10
         },
         "avdDeploySessionHosts": {
@@ -131,11 +143,11 @@
         "avdAsUpdateDomainCount": {
             "value": 5
         },
-        "fslogixStorageSku": {
-            "value": "Premium_LRS"
+        "fslogixStoragePerformance": {
+            "value": "Premium"
         },
-        "encryptionAtHost": {
-            "value": false
+        "msixStoragePerformance": {
+            "value": "Premium"
         },
         "avdSessionHostsSize": {
             "value": "Standard_D2s_v3"
@@ -144,7 +156,7 @@
             "value": "Standard_LRS"
         },
         "avdOsImage": {
-            "value": "win10_21h2"
+            "value": "win11_21h2"
         },
         "securityType": {
             "value": "Standard"
@@ -172,9 +184,6 @@
         },
         "deployAlaWorkspace": {
             "value": true
-        },   
-        "deployCustomPolicyMonitoring": {
-            "value": false
         },  
         "alaExistingWorkspaceResourceId": {
             "value": ""
@@ -183,7 +192,16 @@
             "value": 90
         },
         "enableAcceleratedNetworking": {
+            "value": true
+        },
+        "diskEncryptionKeyExpirationInDays": {
+            "value": 60
+        },
+        "diskZeroTrust": {
             "value": false
         },
+        "deployGpuPolicies": {
+            "value": true
+        }
     }
 }

@@ -189,6 +189,8 @@ param imageVersionStorageAccountType string = 'Standard_LRS'
 @description('Optional. Custom name for the Log Analytics Workspace.')
 param logAnalyticsWorkspaceCustomName string = 'log-avd'
 
+@maxValue(720)
+@minValue(30)
 @description('Optional. Set the data retention in the number of days for the Log Analytics Workspace. (Default: 30)')
 param logAnalyticsWorkspaceDataRetention int = 30
 
@@ -381,66 +383,20 @@ var varImageTemplateContributorRole = [
     }
 ]
 var varImageTemplateName = customNaming ? imageTemplateCustomName : 'it-avd-${operatingSystemImage}'
-var varLocationAcronym = varLocationAcronyms[varLocationLowercase]
-var varLocationAcronyms = {
-    australiacentral: 'auc'
-    australiacentral2: 'auc2'
-    australiaeast: 'aue'
-    australiasoutheast: 'ause'
-    brazilsouth: 'drs'
-    brazilsoutheast: 'brse'
-    canadacentral: 'cac'
-    canadaeast: 'cae'
-    centralindia: 'cin'
-    centralus: 'cus'
-    eastasia: 'eas'
-    eastus: 'eus'
-    eastus2: 'eus2'
-    francecentral: 'frc'
-    francesouth: 'frs'
-    germanynorth: 'den'
-    germanywestcentral: 'dewc'
-    japaneast: 'jpe'
-    japanwest: 'jpw'
-    koreacentral: 'krc'
-    koreasouth: 'krs'
-    northcentralus: 'ncus'
-    northeurope: 'neu'
-    norwayeast: 'noe'
-    norwaywest: 'now'
-    southafricanorth: 'zan'
-    southafricawest: 'zaw'
-    southcentralus: 'scus'
-    southeastasia: 'seas'
-    southindia: 'sin'
-    swedencentral: 'sec'
-    switzerlandnorth: 'chn'
-    switzerlandwest: 'chw'
-    uaecentral: 'aec'
-    uaenorth: 'aen'
-    uksouth: 'uks'
-    ukwest: 'ukw'
-    usgovarizona: 'az'
-    usgoviowa: 'ia'
-    usgovtexas: 'tx'
-    usgovvirginia: 'va'
-    westcentralus: 'wcus'
-    westeurope: 'weu'
-    westindia: 'win'
-    westus: 'wus'
-    westus2: 'wus2'
-    westus3: 'wus3'
-}
-var varLocationLowercase = toLower(deploymentLocation)
+var varLocationAcronym = varLocations[varLocation].acronym
+var varLocation = toLower(replace(deploymentLocation, ' ', ''))
+var varLocations = loadJsonContent('../variables/locations.json')
 var varLogAnalyticsWorkspaceName = customNaming ? logAnalyticsWorkspaceCustomName : 'log-avd-${varNamingStandard}'
 var varModules = [
     {
         name: 'Az.Accounts'
         uri: 'https://www.powershellgallery.com/api/v2/package'
+        version: '2.12.1'
     }
     {
         name: 'Az.ImageBuilder'
         uri: 'https://www.powershellgallery.com/api/v2/package'
+        version: '0.3.0'
     }
 ]
 var varNamingStandard = '${varLocationAcronym}'
@@ -591,62 +547,8 @@ var varScriptCustomizers = union(varRdpShortPathCustomizer, varScreenCaptureProt
 // Placeholder for future feature
 // var varStorageAccountName = customNaming ? storageAccountCustomName : 'stavd${varNamingStandard}${varUniqueStringSixChar}'
 var varTelemetryId = 'pid-b04f18f1-9100-4b92-8e41-71f0d73e3755-${deploymentLocation}'
-var varTimeZone = varTimeZones[deploymentLocation]
-var varTimeZones = {
-    australiacentral: 'AUS Eastern Standard time'
-    australiacentral2: 'AUS Eastern Standard time'
-    australiaeast: 'AUS Eastern Standard time'
-    australiasoutheast: 'AUS Eastern Standard time'
-    brazilsouth: 'E. South America Standard time'
-    brazilsoutheast: 'E. South America Standard time'
-    canadacentral: 'Eastern Standard time'
-    canadaeast: 'Eastern Standard time'
-    centralindia: 'India Standard time'
-    centralus: 'Central Standard time'
-    chinaeast: 'China Standard time'
-    chinaeast2: 'China Standard time'
-    chinanorth: 'China Standard time'
-    chinanorth2: 'China Standard time'
-    eastasia: 'China Standard time'
-    eastus: 'Eastern Standard time'
-    eastus2: 'Eastern Standard time'
-    francecentral: 'Central Europe Standard time'
-    francesouth: 'Central Europe Standard time'
-    germanynorth: 'Central Europe Standard time'
-    germanywestcentral: 'Central Europe Standard time'
-    japaneast: 'Tokyo Standard time'
-    japanwest: 'Tokyo Standard time'
-    jioindiacentral: 'India Standard time'
-    jioindiawest: 'India Standard time'
-    koreacentral: 'Korea Standard time'
-    koreasouth: 'Korea Standard time'
-    northcentralus: 'Central Standard time'
-    northeurope: 'GMT Standard time'
-    norwayeast: 'Central Europe Standard time'
-    norwaywest: 'Central Europe Standard time'
-    southafricanorth: 'South Africa Standard time'
-    southafricawest: 'South Africa Standard time'
-    southcentralus: 'Central Standard time'
-    southindia: 'India Standard time'
-    southeastasia: 'Singapore Standard time'
-    swedencentral: 'Central Europe Standard time'
-    switzerlandnorth: 'Central Europe Standard time'
-    switzerlandwest: 'Central Europe Standard time'
-    uaecentral: 'Arabian Standard time'
-    uaenorth: 'Arabian Standard time'
-    uksouth: 'GMT Standard time'
-    ukwest: 'GMT Standard time'
-    usgovarizona: 'Mountain Standard time'
-    usgoviowa: 'Central Standard time'
-    usgovtexas: 'Central Standard time'
-    usgovvirginia: 'Eastern Standard time'
-    westcentralus: 'Mountain Standard time'
-    westeurope: 'Central Europe Standard time'
-    westindia: 'India Standard time'
-    westus: 'Pacific Standard time'
-    westus2: 'Pacific Standard time'
-    westus3: 'Mountain Standard time'
-}
+var varTimeZone = varLocations[varLocation].timeZone
+
 // Placeholder for future feature
 // var varUniqueStringSixChar = take('${uniqueString(sharedServicesSubId, time)}', 6)
 var varUserAssignedManagedIdentityName = customNaming ? userAssignedManagedIdentityCustomName : 'id-aib-${varNamingStandard}'
@@ -678,7 +580,7 @@ var varVmSize = 'Standard_D4s_v3'
 // Deployments //
 // =========== //
 
-//  Telemetry Deployment.
+// Telemetry Deployment.
 resource telemetryDeployment 'Microsoft.Resources/deployments@2021-04-01' = if (enableTelemetry) {
     name: varTelemetryId
     location: deploymentLocation
@@ -693,9 +595,9 @@ resource telemetryDeployment 'Microsoft.Resources/deployments@2021-04-01' = if (
 }
 
 // AVD Shared Services Resource Group.
-module avdSharedResourcesRg '../../carml/1.0.0/Microsoft.Resources/resourceGroups/deploy.bicep' = {
+module avdSharedResourcesRg '../../carml/1.3.0/Microsoft.Resources/resourceGroups/deploy.bicep' = {
     scope: subscription(sharedServicesSubId)
-    name: 'Resource-Group_${time}'
+    name: 'RG-${time}'
     params: {
         name: varResourceGroupName
         location: deploymentLocation
@@ -720,10 +622,11 @@ resource virtualNetworkJoinExistingRoleCheck 'Microsoft.Authorization/roleDefini
 */
 
 // Role definition deployment.
-module roleDefinitions '../../carml/1.0.0/Microsoft.Authorization/roleDefinitions/subscription/deploy.bicep' = [for i in range(0, length(varRoles)): {
+module roleDefinitions '../../carml/1.3.0/Microsoft.Authorization/roleDefinitions/subscription/deploy.bicep' = [for i in range(0, length(varRoles)): {
     scope: subscription(sharedServicesSubId)
-    name: 'Role-Definition_${i}_${time}'
+    name: 'Role-Definition-${i}-${time}'
     params: {
+        location: deploymentLocation
         subscriptionId: sharedServicesSubId
         description: varRoles[i].description
         roleName: varRoles[i].name
@@ -740,9 +643,9 @@ module roleDefinitions '../../carml/1.0.0/Microsoft.Authorization/roleDefinition
 }]
 
 // Managed identity.
-module userAssignedManagedIdentity '../../carml/1.0.0/Microsoft.ManagedIdentity/userAssignedIdentities/deploy.bicep' = {
+module userAssignedManagedIdentity '../../carml/1.3.0/Microsoft.ManagedIdentity/userAssignedIdentities/deploy.bicep' = {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'User-Assigned-Managed-Identity_${time}'
+    name: 'User-Assigned-Managed-Identity-${time}'
     params: {
         name: varUserAssignedManagedIdentityName
         location: deploymentLocation
@@ -754,8 +657,8 @@ module userAssignedManagedIdentity '../../carml/1.0.0/Microsoft.ManagedIdentity/
 }
 
 // Role assignments.
-module roleAssignments '../../carml/1.2.0/Microsoft.Authorization/roleAssignments/resourceGroup/deploy.bicep' = [for i in range(0, length(varRoles)): {
-    name: 'Role-Assignment_${i}_${time}'
+module roleAssignments '../../carml/1.3.0/Microsoft.Authorization/roleAssignments/resourceGroup/deploy.bicep' = [for i in range(0, length(varRoles)): {
+    name: 'Role-Assignment-${i}-${time}'
     scope: resourceGroup(sharedServicesSubId, varRoles[i].resourceGroup)
     params: {
         roleDefinitionIdOrName: roleDefinitions[i].outputs.resourceId
@@ -765,8 +668,8 @@ module roleAssignments '../../carml/1.2.0/Microsoft.Authorization/roleAssignment
 }]
 
 //// Unique role assignment for Azure US Government since it does not support image template permissions
-module roleAssignment_AzureUSGovernment '../../carml/1.2.0/Microsoft.Authorization/roleAssignments/resourceGroup/deploy.bicep' = if (varAzureCloudName != 'AzureCloud') {
-    name: 'Role-Assignment_MAG_${time}'
+module roleAssignment_AzureUSGovernment '../../carml/1.3.0/Microsoft.Authorization/roleAssignments/resourceGroup/deploy.bicep' = if (varAzureCloudName != 'AzureCloud') {
+    name: 'Role-Assignment-MAG-${time}'
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
     params: {
         roleDefinitionIdOrName: 'Contributor'
@@ -778,7 +681,7 @@ module roleAssignment_AzureUSGovernment '../../carml/1.2.0/Microsoft.Authorizati
 // Compute Gallery.
 module gallery '../../carml/1.3.0/Microsoft.Compute/galleries/deploy.bicep' = {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Compute-Gallery_${time}'
+    name: 'Compute-Gallery-${time}'
     params: {
         name: varImageGalleryName
         location: imageVersionPrimaryLocation
@@ -793,9 +696,9 @@ module gallery '../../carml/1.3.0/Microsoft.Compute/galleries/deploy.bicep' = {
 // Image Definition.
 module image '../../carml/1.3.0/Microsoft.Compute/galleries/images/deploy.bicep' = {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Image-Definition_${time}'
+    name: 'Image-Definition-${time}'
     params: {
-        galleryName: gallery.outputs.name
+        galleryName: varImageGalleryName
         name: varImageDefinitionName
         osState: varOperatingSystemImageDefinitions[operatingSystemImage].osState
         osType: varOperatingSystemImageDefinitions[operatingSystemImage].osType
@@ -821,7 +724,7 @@ module image '../../carml/1.3.0/Microsoft.Compute/galleries/images/deploy.bicep'
 // Image template.
 module imageTemplate '../../carml/1.3.0/Microsoft.VirtualMachineImages/imageTemplates/deploy.bicep' = {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Image-Template_${time}'
+    name: 'Image-Template-${time}'
     params: {
         name: varImageTemplateName
         subnetId: !empty(existingVirtualNetworkResourceId) && !empty(existingSubnetName) ? '${existingVirtualNetworkResourceId}/subnets/${existingSubnetName}' : ''
@@ -851,9 +754,9 @@ module imageTemplate '../../carml/1.3.0/Microsoft.VirtualMachineImages/imageTemp
 }
 
 // Log Analytics Workspace.
-module workspace '../../carml/1.2.1/Microsoft.OperationalInsights/workspaces/deploy.bicep' = if (enableMonitoringAlerts && empty(existingLogAnalyticsWorkspaceResourceId)) {
+module workspace '../../carml/1.3.0/Microsoft.OperationalInsights/workspaces/deploy.bicep' = if (enableMonitoringAlerts && empty(existingLogAnalyticsWorkspaceResourceId)) {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Log-Analytics-Workspace_${time}'
+    name: 'Log-Analytics-Workspace-${time}'
     params: {
         location: deploymentLocation
         name: varLogAnalyticsWorkspaceName
@@ -867,19 +770,19 @@ module workspace '../../carml/1.2.1/Microsoft.OperationalInsights/workspaces/dep
 }
 
 // Introduce wait after log analitics workspace creation.
-module workspaceWait '../../carml/1.0.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = if (enableMonitoringAlerts && empty(existingLogAnalyticsWorkspaceResourceId)) {
+module workspaceWait '../../carml/1.3.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = if (enableMonitoringAlerts && empty(existingLogAnalyticsWorkspaceResourceId)) {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Log-Analytics-Workspace-Wait_${time}'
+    name: 'LA-Workspace-Wait-${time}'
     params: {
-        name: '${varLogAnalyticsWorkspaceName}_wait_${time}'
+        name: 'LA-Workspace-Wait-${time}'
         location: deploymentLocation
-        azPowerShellVersion: '6.2'
+        azPowerShellVersion: '8.3.0'
         cleanupPreference: 'Always'
         timeout: 'PT10M'
         scriptContent: '''
         Write-Host "Start"
         Get-Date
-        Start-Sleep -Seconds 120
+        Start-Sleep -Seconds 60
         Write-Host "Stop"
         Get-Date
         '''
@@ -890,9 +793,9 @@ module workspaceWait '../../carml/1.0.0/Microsoft.Resources/deploymentScripts/de
 }
 
 // Automation account.
-module automationAccount '../../carml/1.2.1/Microsoft.Automation/automationAccounts/deploy.bicep' = {
+module automationAccount '../../carml/1.3.0/Microsoft.Automation/automationAccounts/deploy.bicep' = {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Automation-Account_${time}'
+    name: 'Automation-Account-${time}'
     params: {
         diagnosticLogCategoriesToEnable: [
             'JobLogs'
@@ -924,7 +827,7 @@ module automationAccount '../../carml/1.2.1/Microsoft.Automation/automationAccou
             {
                 name: 'aib-build-automation'
                 description: 'When this runbook is triggered, last build date is checked on the AIB image template.  If a new marketplace image has been released since that date, a new build is initiated. If a build has never been initiated then it will be start one.'
-                runbookType: 'PowerShell'
+                type: 'PowerShell'
                 // ToDo: Update URL before PR merge
                 uri: 'https://raw.githubusercontent.com/Azure/avdaccelerator/main/workload/scripts/New-AzureImageBuilderBuild.ps1'
                 version: '1.0.0.0'
@@ -954,21 +857,22 @@ module automationAccount '../../carml/1.2.1/Microsoft.Automation/automationAccou
 
 // Automation accounts.
 @batchSize(1)
-module modules '../../carml/1.2.1/Microsoft.Automation/automationAccounts/modules/deploy.bicep' = [for i in range(0, length(varModules)): {
+module modules '../../carml/1.3.0/Microsoft.Automation/automationAccounts/modules/deploy.bicep' = [for i in range(0, length(varModules)): {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Automation-Account-Module_${i}_${time}'
+    name: 'AA-Module-${i}-${time}'
     params: {
         name: varModules[i].name
         location: deploymentLocation
         automationAccountName: automationAccount.outputs.name
         uri: varModules[i].uri
+        version: varModules[i].version
     }
 }]
 
 // Commenting out for future feature release
 /* module storageAccount '../../carml/1.2.0/Microsoft.Storage/storageAccounts/deploy.bicep' = {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Storage-Account_${time}'
+    name: 'Storage-Account-${time}'
     params: {
         name: varStorageAccountName
         location: deploymentLocation
@@ -995,9 +899,9 @@ module modules '../../carml/1.2.1/Microsoft.Automation/automationAccounts/module
 */
 
 // Action groups.
-module actionGroup '../../carml/1.0.0/Microsoft.Insights/actionGroups/deploy.bicep' = if (enableMonitoringAlerts) {
+module actionGroup '../../carml/1.3.0/Microsoft.Insights/actionGroups/deploy.bicep' = if (enableMonitoringAlerts) {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Action-Group_${time}'
+    name: 'Action-Group-${time}'
     params: {
         location: 'global'
         groupShortName: 'aib-email'
@@ -1018,9 +922,9 @@ module actionGroup '../../carml/1.0.0/Microsoft.Insights/actionGroups/deploy.bic
 }
 
 // Schedules.
-module scheduledQueryRules '../../carml/1.2.1/Microsoft.Insights/scheduledQueryRules/deploy.bicep' = [for i in range(0, length(varAlerts)): if (enableMonitoringAlerts) {
+module scheduledQueryRules '../../carml/1.3.0/Microsoft.Insights/scheduledQueryRules/deploy.bicep' = [for i in range(0, length(varAlerts)): if (enableMonitoringAlerts) {
     scope: resourceGroup(sharedServicesSubId, varResourceGroupName)
-    name: 'Scheduled-Query-Rule_${i}_${time}'
+    name: 'Scheduled-Query-Rule-${i}-${time}'
     params: {
         location: deploymentLocation
         name: varAlerts[i].name
