@@ -1,7 +1,11 @@
 param ActionGroupName string
+param AllResourcesSameRG bool
+param AutoResolveAlert bool
+param AVDResourceGroupId string
 param ANFVolumeResourceIds array
 param DistributionGroup string
-param HostPoolInfo string
+param Environment string
+param HostPoolInfo array
 param HostPools array
 param Location string
 param LogAnalyticsWorkspaceResourceId string
@@ -13,7 +17,7 @@ param StorageAccountResourceIds array
 param Tags object
 
 var SubscriptionId = subscription().subscriptionId
-var CloudEnvironment = environment().name
+var SubscriptionName = replace(subscription().displayName, ' ', '')
 
 module actionGroup '../../../../../carml/1.3.0/Microsoft.Insights/actionGroups/deploy.bicep' = {
   name: ActionGroupName
@@ -34,13 +38,31 @@ module actionGroup '../../../../../carml/1.3.0/Microsoft.Insights/actionGroups/d
   }
 }
 
-module metricAlertsVMs 'metricAlertsVMs.bicep' = [for i in range(0, length(HostPools)): {
-  name: 'linked_VMMtrcAlrts_${split(HostPools[i], '/')[8]}'
+// If VM and Host Pools mapped - loop through each object in Host Pool Info which will have a single HP per VM RG
+module metricAlertsVms 'metricAlertsVms.bicep' = [for i in range(0, length(HostPoolInfo)): if(!AllResourcesSameRG) {
+  name: !AllResourcesSameRG ? 'lnk_VMMtrcAlrts_m_${split(HostPoolInfo[i].colHostPoolName, '/')[8]}' : 'lnk_VMMtrcAlrts_m_NA'
   params: {
-    HostPoolInfo: array(json(HostPoolInfo))[i]
+    HostPoolName: !AllResourcesSameRG ? split(HostPoolInfo[i].colHostPoolName, '/')[8] : 'none'
+    Environment: Environment
+    VMResourceGroupId: HostPoolInfo[i].colVMresGroup
     MetricAlerts: MetricAlerts
     Enabled: false
-    AutoMitigate: false
+    AutoMitigate: AutoResolveAlert
+    Location: Location
+    ActionGroupId: actionGroup.outputs.resourceId
+    Tags: Tags
+  }
+}]
+// If all resources in same RG, loop through Host Pools
+module metricAlertsVmsSingleRG 'metricAlertsVms.bicep' = [for i in range(0, length(HostPools)): if(AllResourcesSameRG) {
+  name: 'lnk_VMMtrcAlrts_s_${split(HostPools[i], '/')[8]}'
+  params: {
+    Environment: Environment
+    HostPoolName: split(HostPools[i], '/')[8]
+    VMResourceGroupId: AVDResourceGroupId
+    MetricAlerts: MetricAlerts
+    Enabled: false
+    AutoMitigate: AutoResolveAlert
     Location: Location
     ActionGroupId: actionGroup.outputs.resourceId
     Tags: Tags
@@ -48,10 +70,11 @@ module metricAlertsVMs 'metricAlertsVMs.bicep' = [for i in range(0, length(HostP
 }]
 
 module storAccountMetric 'storAccountMetric.bicep' = [for i in range(0, length(StorageAccountResourceIds)): if (length(StorageAccountResourceIds) > 0) {
-  name: 'linked_StrAcctMtrcAlrts_${split(StorageAccountResourceIds[i], '/')[8]}'
+  name: 'lnk_StrAcctMtrcAlrts_${split(StorageAccountResourceIds[i], '/')[8]}'
   params: {
-    AutoMitigate: false
+    AutoMitigate: AutoResolveAlert
     Enabled: false
+    Environment: Environment
     Location: Location
     StorageAccountResourceID: StorageAccountResourceIds[i]
     MetricAlertsStorageAcct: MetricAlerts.storageAccounts
@@ -61,10 +84,11 @@ module storAccountMetric 'storAccountMetric.bicep' = [for i in range(0, length(S
 }]
 
 module azureNetAppFilesMetric 'anfMetric.bicep' = [for i in range(0, length(ANFVolumeResourceIds)): if (length(ANFVolumeResourceIds) > 0) {
-  name: 'linked_ANFMtrcAlrts_${split(ANFVolumeResourceIds[i], '/')[12]}'
+  name: 'lnk_ANFMtrcAlrts_${split(ANFVolumeResourceIds[i], '/')[12]}'
   params: {
-    AutoMitigate: false
+    AutoMitigate: AutoResolveAlert
     Enabled: false
+    Environment: Environment
     Location: Location
     ANFVolumeResourceID: ANFVolumeResourceIds[i]
     MetricAlertsANF: MetricAlerts.anf
@@ -76,10 +100,11 @@ module azureNetAppFilesMetric 'anfMetric.bicep' = [for i in range(0, length(ANFV
 // If Metric Namespace contains file services ; change scopes to append default
 // module to loop through each scope time as it MUST be a single Resource ID
 module fileServicesMetric 'fileservicsmetric.bicep' = [for i in range(0, length(StorageAccountResourceIds)): if (length(StorageAccountResourceIds) > 0) {
-  name: 'linked_FlSvcsMtrcAlrts_${i}'
+  name: 'lnk_FlSvcsMtrcAlrts_${i}'
   params: {
-    AutoMitigate: false
+    AutoMitigate: AutoResolveAlert
     Enabled: false
+    Environment: Environment
     Location: Location
     StorageAccountResourceID: StorageAccountResourceIds[i]
     MetricAlertsFileShares: MetricAlerts.fileShares
@@ -89,11 +114,11 @@ module fileServicesMetric 'fileservicsmetric.bicep' = [for i in range(0, length(
 }]
 
 module logAlertStorage '../../../../../carml/1.3.0/Microsoft.Insights/scheduledQueryRules/deploy.bicep' = [for i in range(0, length(LogAlertsStorage)): {
-  name: 'carml_${LogAlertsStorage[i].name}'
+  name: 'c_${LogAlertsStorage[i].name}'
   params: {
     enableDefaultTelemetry: false
     name: LogAlertsStorage[i].name
-    autoMitigate: false
+    autoMitigate: AutoResolveAlert
     criterias: LogAlertsStorage[i].criteria
     scopes: [ LogAnalyticsWorkspaceResourceId ]
     location: Location
@@ -107,11 +132,26 @@ module logAlertStorage '../../../../../carml/1.3.0/Microsoft.Insights/scheduledQ
   }
 }]
 
-module logAlertHostPoolQueries 'hostPoolAlerts.bicep' = [for hostpool in HostPools: {
-  name: 'linked_HPAlrts-${guid(split(hostpool, '/')[4],split(hostpool, '/')[8])}'
+module logAlertHostPoolQueriesMapped 'hostPoolAlerts.bicep' = [for hostpool in HostPoolInfo: if(!AllResourcesSameRG) {
+  name: 'lnk_HPAlrts-${split(hostpool.colHostPoolName, '/')[8]}'
   params: {
-    AutoMitigate: false
+    AutoMitigate: AutoResolveAlert
     ActionGroupId: actionGroup.outputs.resourceId
+    Environment: Environment
+    HostPoolName: split(hostpool.colHostPoolName, '/')[8]
+    Location: Location
+    LogAlertsHostPool: LogAlertsHostPool
+    LogAnalyticsWorkspaceResourceId: LogAnalyticsWorkspaceResourceId
+    Tags: {}
+  }
+}]
+
+module logAlertHostPoolQueriesSingleRG 'hostPoolAlerts.bicep' = [for hostpool in HostPools: if(AllResourcesSameRG) {
+  name: 'lnk_HPAlrts-${split(hostpool, '/')[8]}'
+  params: {
+    AutoMitigate: AutoResolveAlert
+    ActionGroupId: actionGroup.outputs.resourceId
+    Environment: Environment
     HostPoolName: split(hostpool, '/')[8]
     Location: Location
     LogAlertsHostPool: LogAlertsHostPool
@@ -122,10 +162,10 @@ module logAlertHostPoolQueries 'hostPoolAlerts.bicep' = [for hostpool in HostPoo
 
 // Currently only deploys IF Cloud Environment is Azure Commercial Cloud
 module logAlertSvcHealth '../../../../../carml/1.3.0/Microsoft.Insights/activityLogAlerts/deploy.bicep' = [for i in range(0, length(LogAlertsSvcHealth)): {
-  name: 'carml_${LogAlertsSvcHealth[i].name}'
+  name: 'c_${LogAlertsSvcHealth[i].name}'
   params: {
     enableDefaultTelemetry: false
-    name: LogAlertsSvcHealth[i].name
+    name: '${LogAlertsSvcHealth[i].name}-${SubscriptionName}'
     enabled: false
     location: 'global'
     tags: contains(Tags, 'Microsoft.Insights/activityLogAlerts') ? Tags['Microsoft.Insights/activityLogAlerts'] : {}

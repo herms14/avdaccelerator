@@ -17,7 +17,7 @@ param automationAccountCustomName string = 'aa-avd'
 @description('Required. The start time for the peak hours in local Standard time.')
 param beginPeakTime string = '8:00'
 
-@description('Optional. Cost center of owner team. (Defualt: Contoso-CC)')
+@description('Optional. Cost center of owner team. (Default: Contoso-CC)')
 param costCenterTag string = 'Contoso-CC'
 
 @description('Optional. Tag value for custom criticality value. (Default: Contoso-Critical)')
@@ -236,6 +236,7 @@ module workspaceWait '../../../../carml/1.3.0/Microsoft.Resources/deploymentScri
       azPowerShellVersion: '8.3.0'
       cleanupPreference: 'Always'
       timeout: 'PT10M'
+      retentionInterval: 'PT1H'
       scriptContent: '''
       Write-Host "Start"
       Get-Date

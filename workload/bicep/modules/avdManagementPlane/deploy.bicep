@@ -3,133 +3,126 @@ targetScope = 'subscription'
 // ========== //
 // Parameters //
 // ========== //
-@description('Location where to deploy AVD management plane.')
+@sys.description('Location where to deploy AVD management plane.')
 param managementPlaneLocation string
 
-@description('AVD workload subscription ID, multiple subscriptions scenario.')
+@sys.description('AVD workload subscription ID, multiple subscriptions scenario.')
 param workloadSubsId string
 
-@description('Virtual machine time zone.')
+@sys.description('Virtual machine time zone.')
 param computeTimeZone string
 
-@description('The service providing domain services for Azure Virtual Desktop.')
+@sys.description('The service providing domain services for Azure Virtual Desktop.')
 param identityServiceProvider string
 
-@description('Identity ID to grant RBAC role to access AVD application group.')
+@sys.description('Identity ID to grant RBAC role to access AVD application group.')
 param applicationGroupIdentitiesIds array
 
-@description('Identity type to grant RBAC role to access AVD application group.')
+@sys.description('Identity type to grant RBAC role to access AVD application group.')
 param applicationGroupIdentityType string
 
-@description('AVD OS image source.')
+@sys.description('AVD OS image source.')
 param osImage string
 
-@description('AVD Resource Group Name for the service objects.')
+@sys.description('AVD Resource Group Name for the service objects.')
 param serviceObjectsRgName string
 
-@description('AVD Application Group Name for the applications.')
-param applicationGroupNameRapp string
+@sys.description('AVD Application group for the session hosts. Desktop type.')
+param applicationGroupName string
 
-@description('AVD Application Group friendly Name for the applications.')
-param applicationGroupFriendlyNameRapp string
-
-@description('AVD Application group for the session hosts. Desktop type.')
-param applicationGroupNameDesktop string
-
-@description('AVD Application group for the session hosts. Desktop type (friendly name).')
+@sys.description('AVD Application group for the session hosts. Desktop type (friendly name).')
 param applicationGroupFriendlyNameDesktop string
 
-@description('AVD deploy remote app application group.')
-param deployRappGroup bool
-
-@description('AVD deploy scaling plan.')
+@sys.description('AVD deploy scaling plan.')
 param deployScalingPlan bool
 
-@description('AVD Host Pool Name')
+@sys.description('AVD Host Pool Name')
 param hostPoolName string
 
-@description('AVD Host Pool friendly Name')
+@sys.description('AVD Host Pool friendly Name')
 param hostPoolFriendlyName string
 
-@description('AVD scaling plan name')
+@sys.description('AVD scaling plan name')
 param scalingPlanName string
 
-@description('AVD scaling plan schedules')
+@sys.description('AVD scaling plan schedules')
 param scalingPlanSchedules array
 
-@description('AVD workspace name.')
+@sys.description('AVD workspace name.')
 param workSpaceName string
 
-@description('AVD workspace friendly name.')
+@sys.description('AVD workspace friendly name.')
 param workSpaceFriendlyName string
 
-@description('AVD host pool Custom RDP properties.')
+@sys.description('AVD host pool Custom RDP properties.')
 param hostPoolRdpProperties string
 
 @allowed([
   'Personal'
   'Pooled'
 ])
-@description('Optional. AVD host pool type.')
+@sys.description('Optional. AVD host pool type.')
 param hostPoolType string
+
+@sys.description('Optional. The type of preferred application group type, default to Desktop Application Group.')
+@allowed([
+  'Desktop'
+  'None'
+  'RailApplications'
+])
+param preferredAppGroupType string = 'Desktop'
 
 @allowed([
   'Automatic'
   'Direct'
 ])
-@description('Optional. AVD host pool type.')
+@sys.description('Optional. AVD host pool type.')
 param personalAssignType string
 
 @allowed([
   'BreadthFirst'
   'DepthFirst'
 ])
-@description('AVD host pool load balacing type.')
+@sys.description('AVD host pool load balacing type.')
 param hostPoolLoadBalancerType string
 
-@description('Optional. AVD host pool maximum number of user sessions per session host.')
+@sys.description('Optional. AVD host pool maximum number of user sessions per session host.')
 param hostPoolMaxSessions int
 
-@description('Optional. AVD host pool start VM on Connect.')
+@sys.description('Optional. AVD host pool start VM on Connect.')
 param startVmOnConnect bool
 
-@description('Tags to be applied to resources')
+@sys.description('Optional. AVD host pool start VM on Connect.')
+param hostPoolAgentUpdateSchedule array
+
+@sys.description('Tags to be applied to resources')
 param tags object
 
-@description('Tag to exclude resources from scaling plan.')
+@sys.description('Tag to exclude resources from scaling plan.')
 param scalingPlanExclusionTag string
 
-@description('Log analytics workspace for diagnostic logs.')
+@sys.description('Log analytics workspace for diagnostic logs.')
 param alaWorkspaceResourceId string
 
-@description('Diagnostic logs retention.')
+@sys.description('Diagnostic logs retention.')
 param diagnosticLogsRetentionInDays int
 
-@description('Do not modify, used to set unique value for resource deployment.')
+@sys.description('Do not modify, used to set unique value for resource deployment.')
 param time string = utcNow()
 
 // =========== //
 // Variable declaration //
 // =========== //
-var varDesktopApplicaitonGroups = [
+var varApplicaitonGroups = [
   {
-    name: applicationGroupNameDesktop
+    name: applicationGroupName
     friendlyName: applicationGroupFriendlyNameDesktop
     location: managementPlaneLocation
-    applicationGroupType: 'Desktop'
-  }
-]
-var varRAppApplicationGroups = [
-  {
-    name: applicationGroupNameRapp
-    friendlyName: applicationGroupFriendlyNameRapp
-    location: managementPlaneLocation
-    applicationGroupType: 'RemoteApp'
+    applicationGroupType: (preferredAppGroupType == 'Desktop') ? 'Desktop' : 'RemoteApp'
   }
 ]
 var varHostPoolRdpPropertiesDomainServiceCheck = (identityServiceProvider == 'AAD') ? '${hostPoolRdpProperties};targetisaadjoined:i:1;enablerdsaadauth:i:1' : hostPoolRdpProperties
-var varFinalApplicationGroups = deployRappGroup ? concat(varDesktopApplicaitonGroups, varRAppApplicationGroups) : varDesktopApplicaitonGroups
-var varRAppApplicationGroupsStandardApps = [
+var varRAppApplicationGroupsStandardApps = (preferredAppGroupType == 'RailApplications') ? [
   {
     name: 'Task Manager'
     description: 'Task Manager'
@@ -158,8 +151,8 @@ var varRAppApplicationGroupsStandardApps = [
     showInPortal: true
     filePath: 'C:\\WINDOWS\\system32\\mtsc.exe'
   }
-]
-var varRAppApplicationGroupsOfficeApps = [
+]: []
+var varRAppApplicationGroupsOfficeApps = (preferredAppGroupType == 'RailApplications') ? [
   {
     name: 'Microsoft Excel'
     description: 'Microsoft Excel'
@@ -188,35 +181,18 @@ var varRAppApplicationGroupsOfficeApps = [
     showInPortal: true
     filePath: 'C:\\Program Files\\Microsoft Office\\root\\Office16\\OUTLOOK.EXE'
   }
-]
-var varRAppApplicationGroupsApps = (contains(osImage, 'office')) ? union(varRAppApplicationGroupsStandardApps, varRAppApplicationGroupsOfficeApps) : varRAppApplicationGroupsStandardApps
+]: []
+var varRAppApplicationGroupsApps = (preferredAppGroupType == 'RailApplications') ? ((contains(osImage, 'office')) ? union(varRAppApplicationGroupsStandardApps, varRAppApplicationGroupsOfficeApps) : varRAppApplicationGroupsStandardApps) : []
 var varHostPoolDiagnostic = [
-  //'Checkpoint'
-  //'Error'
-  //'Management'
-  //'Connection'
-  //'HostRegistration'
-  //'AgentHealthStatus'
-  //'NetworkData'
-  //'ConnectionGraphicsData'
-  //'SessionHostManagement'
   'allLogs'
 ]
 var varApplicationGroupDiagnostic = [
-  //'Checkpoint'
-  //'Error'
-  //'Management'
   'allLogs'
 ]
 var varWorkspaceDiagnostic = [
-  //'Checkpoint'
-  //'Error'
-  //'Management'
-  //'Feed'
   'allLogs'
 ]
 var varScalingPlanDiagnostic = [
-  //'Autoscale'
   'allLogs'
 ]
 
@@ -237,27 +213,23 @@ module hostPool '../../../../carml/1.3.0/Microsoft.DesktopVirtualization/hostpoo
     customRdpProperty: varHostPoolRdpPropertiesDomainServiceCheck
     loadBalancerType: hostPoolLoadBalancerType
     maxSessionLimit: hostPoolMaxSessions
+    preferredAppGroupType: preferredAppGroupType
     personalDesktopAssignmentType: personalAssignType
     tags: tags
     diagnosticWorkspaceId: alaWorkspaceResourceId
     diagnosticLogsRetentionInDays: diagnosticLogsRetentionInDays
     diagnosticLogCategoriesToEnable: varHostPoolDiagnostic
-    agentUpdate: {
-      //useSessionHostLocalTime: true
-      //maintenanceWindowTimeZone: computeTimeZone
-      //type: 'Default'
-      //maintenanceWindows: [
-      //  {
-      //    dayOfWeek: 'string'
-      //    hour: int
-      //  }
-      //]
-    }
+    agentUpdate: !empty(hostPoolAgentUpdateSchedule) ? {
+        maintenanceWindows: hostPoolAgentUpdateSchedule
+        maintenanceWindowTimeZone: computeTimeZone
+        type: 'Scheduled'
+        useSessionHostLocalTime: true
+    }: {}
   }
 }
 
 // Application groups.
-module applicationGroups '../../../../carml/1.3.0/Microsoft.DesktopVirtualization/applicationgroups/deploy.bicep' = [for applicationGroup in varFinalApplicationGroups: {
+module applicationGroups '../../../../carml/1.3.0/Microsoft.DesktopVirtualization/applicationgroups/deploy.bicep' = [for applicationGroup in varApplicaitonGroups: {
   scope: resourceGroup('${workloadSubsId}', '${serviceObjectsRgName}')
   name: '${applicationGroup.name}-${time}'
   params: {
@@ -274,7 +246,7 @@ module applicationGroups '../../../../carml/1.3.0/Microsoft.DesktopVirtualizatio
       principalIds: applicationGroupIdentitiesIds
       principalType: applicationGroupIdentityType
       }
-    ]: []     
+    ]: []   
     diagnosticWorkspaceId: alaWorkspaceResourceId
     diagnosticLogsRetentionInDays: diagnosticLogsRetentionInDays
     diagnosticLogCategoriesToEnable: varApplicationGroupDiagnostic
@@ -292,11 +264,8 @@ module workSpace '../../../../carml/1.3.0/Microsoft.DesktopVirtualization/worksp
       name: workSpaceName
       friendlyName: workSpaceFriendlyName
       location: managementPlaneLocation
-      appGroupResourceIds: deployRappGroup ? [
-        '/subscriptions/${workloadSubsId}/resourceGroups/${serviceObjectsRgName}/providers/Microsoft.DesktopVirtualization/applicationgroups/${applicationGroupNameDesktop}'
-        '/subscriptions/${workloadSubsId}/resourceGroups/${serviceObjectsRgName}/providers/Microsoft.DesktopVirtualization/applicationgroups/${applicationGroupNameRapp}'
-      ]: [
-        '/subscriptions/${workloadSubsId}/resourceGroups/${serviceObjectsRgName}/providers/Microsoft.DesktopVirtualization/applicationgroups/${applicationGroupNameDesktop}'
+      appGroupResourceIds: [
+        '/subscriptions/${workloadSubsId}/resourceGroups/${serviceObjectsRgName}/providers/Microsoft.DesktopVirtualization/applicationgroups/${applicationGroupName}'
       ]
       tags: tags
       diagnosticWorkspaceId: alaWorkspaceResourceId

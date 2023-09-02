@@ -4,44 +4,46 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.17.1.54307",
-      "templateHash": "9757436986948477374"
-    }
+      "version": "0.18.4.5664",
+      "templateHash": "15185302854453123490"
+    },
+    "name": "AVD Accelerator - Baseline Custom Image Deployment",
+    "description": "AVD Accelerator - Custom Image Baseline"
   },
   "parameters": {
     "alertsActionGroupCustomName": {
       "type": "string",
       "defaultValue": "ag-aib",
       "metadata": {
-        "description": "Optional. Custom name for Action Group."
+        "description": "Custom name for Action Group."
       }
     },
     "alertsDistributionGroup": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Optional. Input the email distribution list for alert notifications when AIB builds succeed or fail."
+        "description": "Input the email distribution list for alert notifications when AIB builds succeed or fail."
       }
     },
     "applicationNameTag": {
       "type": "string",
       "defaultValue": "Contoso-App",
       "metadata": {
-        "description": "Optional. Details about the application."
+        "description": "Details about the application."
       }
     },
     "automationAccountCustomName": {
       "type": "string",
       "defaultValue": "aa-avd",
       "metadata": {
-        "description": "Optional. Custom name for the Automation Account."
+        "description": "Custom name for the Automation Account."
       }
     },
     "buildSchedule": {
       "type": "string",
       "defaultValue": "Recurring",
       "metadata": {
-        "description": "Optional. Determine whether to build the image template one time or check daily for a new marketplace image and auto build when found. (Default: Recurring)"
+        "description": "Determine whether to build the image template one time or check daily for a new marketplace image and auto build when found. (Default: Recurring)"
       },
       "allowedValues": [
         "OneTime",
@@ -52,21 +54,21 @@
       "type": "string",
       "defaultValue": "Contoso-CC",
       "metadata": {
-        "description": "Optional. Cost center of owner team. (Defualt: Contoso-CC)"
+        "description": "Cost center of owner team. (Default: Contoso-CC)"
       }
     },
     "criticalityCustomTag": {
       "type": "string",
       "defaultValue": "Contoso-Critical",
       "metadata": {
-        "description": "Optional. Tag value for custom criticality value. (Default: Contoso-Critical)"
+        "description": "Tag value for custom criticality value. (Default: Contoso-Critical)"
       }
     },
     "criticalityTag": {
       "type": "string",
       "defaultValue": "Low",
       "metadata": {
-        "description": "Optional. criticality of each workload. (Default: Low)"
+        "description": "criticality of each workload. (Default: Low)"
       },
       "allowedValues": [
         "Low",
@@ -80,14 +82,14 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Optional. Determine whether to enable custom naming for the Azure resources. (Default: false)"
+        "description": "Determine whether to enable custom naming for the Azure resources. (Default: false)"
       }
     },
     "dataClassificationTag": {
       "type": "string",
       "defaultValue": "Non-business",
       "metadata": {
-        "description": "Optional. Sensitivity of data hosted (Default: Non-business)"
+        "description": "Sensitivity of data hosted (Default: Non-business)"
       },
       "allowedValues": [
         "Non-business",
@@ -101,14 +103,14 @@
       "type": "string",
       "defaultValue": "Contoso-AVD",
       "metadata": {
-        "description": "Optional. Department that owns the deployment, (Dafult: Contoso-AVD)"
+        "description": "Department that owns the deployment, (Dafult: Contoso-AVD)"
       }
     },
     "deploymentLocation": {
       "type": "string",
       "defaultValue": "eastus",
       "metadata": {
-        "description": "Required. Location to deploy the resources in this solution, except the image template. (Default: eastus)"
+        "description": "Location to deploy the resources in this solution, except the image template. (Default: eastus)"
       },
       "allowedValues": [
         "australiaeast",
@@ -151,14 +153,14 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Optional. Set to deploy monitoring and alerts for the build automation (Default: false)."
+        "description": "Set to deploy monitoring and alerts for the build automation (Default: false)."
       }
     },
     "enableResourceTags": {
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Optional. Apply tags on resources and resource groups. (Default: false)"
+        "description": "Apply tags on resources and resource groups. (Default: false)"
       }
     },
     "enableTelemetry": {
@@ -172,7 +174,7 @@
       "type": "string",
       "defaultValue": "Dev",
       "metadata": {
-        "description": "Optional. Deployment environment of the application, workload. (Default: Dev)"
+        "description": "Deployment environment of the application, workload. (Default: Dev)"
       },
       "allowedValues": [
         "Prod",
@@ -184,47 +186,47 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Optional. Existing Azure log analytics workspace resource ID to capture build logs. (Default: )"
+        "description": "Existing Azure log analytics workspace resource ID to capture build logs. (Default: )"
       }
     },
     "existingSubnetName": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Optional. Input the name of the subnet for the existing virtual network that the network interfaces on the build virtual machines will join. (Default: \"\")"
+        "description": "Input the name of the subnet for the existing virtual network that the network interfaces on the build virtual machines will join. (Default: \"\")"
       }
     },
     "existingVirtualNetworkResourceId": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Optional. Input the resource ID for the existing virtual network that the network interfaces on the build virtual machines will join. (Default: \"\")"
+        "description": "Input the resource ID for the existing virtual network that the network interfaces on the build virtual machines will join. (Default: \"\")"
       }
     },
     "imageBuildNameTag": {
       "type": "string",
       "defaultValue": "AVD-Image",
       "metadata": {
-        "description": "Optional. The name of workload for tagging purposes. (Default: AVD-Image)"
+        "description": "The name of workload for tagging purposes. (Default: AVD-Image)"
       }
     },
     "imageDefinitionCustomName": {
       "type": "string",
       "defaultValue": "avd-win11-21h2",
       "metadata": {
-        "description": "Optional. Custom name for Image Definition. (Default: avd-win11-21h2)"
+        "description": "Custom name for Image Definition. (Default: avd-win11-21h2)"
       },
       "maxLength": 64
     },
     "imageDefinitionAcceleratedNetworkSupported": {
       "type": "string",
-      "defaultValue": "false",
+      "defaultValue": "true",
       "allowedValues": [
         "true",
         "false"
       ],
       "metadata": {
-        "description": "Optional. The image supports accelerated networking.\r\nAccelerated networking enables single root I/O virtualization (SR-IOV) to a VM, greatly improving its networking performance.\r\nThis high-performance path bypasses the host from the data path, which reduces latency, jitter, and CPU utilization for the\r\nmost demanding network workloads on supported VM types.\r\n"
+        "description": "The image supports accelerated networking.\r\nAccelerated networking enables single root I/O virtualization (SR-IOV) to a VM, greatly improving its networking performance.\r\nThis high-performance path bypasses the host from the data path, which reduces latency, jitter, and CPU utilization for the\r\nmost demanding network workloads on supported VM types.\r\n"
       }
     },
     "imageDefinitionHibernateSupported": {
@@ -235,14 +237,14 @@
         "false"
       ],
       "metadata": {
-        "description": "Optional. The image will support hibernation."
+        "description": "The image will support hibernation."
       }
     },
     "imageDefinitionSecurityType": {
       "type": "string",
       "defaultValue": "Standard",
       "metadata": {
-        "description": "Optional. Choose the Security Type of the Image Definition. (Default: Standard)"
+        "description": "Choose the Security Type of the Image Definition. (Default: Standard)"
       },
       "allowedValues": [
         "Standard",
@@ -255,7 +257,7 @@
       "type": "string",
       "defaultValue": "gal_avd_use2_001",
       "metadata": {
-        "description": "Optional. Custom name for Image Gallery. (Default: gal_avd_use2_001)"
+        "description": "Custom name for Image Gallery. (Default: gal_avd_use2_001)"
       },
       "maxLength": 64
     },
@@ -263,7 +265,7 @@
       "type": "string",
       "defaultValue": "it-avd-win11-22h2",
       "metadata": {
-        "description": "Optional. Custom name for Image Template. (Default: it-avd-win11-21h2)"
+        "description": "Custom name for Image Template. (Default: it-avd-win11-21h2)"
       },
       "maxLength": 260
     },
@@ -271,20 +273,20 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Optional. Disaster recovery replication location for Image Version. (Default:\"\")"
+        "description": "Disaster recovery replication location for Image Version. (Default:\"\")"
       }
     },
     "imageVersionPrimaryLocation": {
       "type": "string",
       "metadata": {
-        "description": "Required. Primary replication location for Image Version. (Default:)"
+        "description": "Primary replication location for Image Version. (Default:)"
       }
     },
     "imageVersionStorageAccountType": {
       "type": "string",
       "defaultValue": "Standard_LRS",
       "metadata": {
-        "description": "Optional. Determine the Storage Account Type for the Image Version distributed by the Image Template. (Default: Standard_LRS)"
+        "description": "Determine the Storage Account Type for the Image Version distributed by the Image Template. (Default: Standard_LRS)"
       },
       "allowedValues": [
         "Standard_LRS",
@@ -295,14 +297,14 @@
       "type": "string",
       "defaultValue": "log-avd",
       "metadata": {
-        "description": "Optional. Custom name for the Log Analytics Workspace."
+        "description": "Custom name for the Log Analytics Workspace."
       }
     },
     "logAnalyticsWorkspaceDataRetention": {
       "type": "int",
       "defaultValue": 30,
       "metadata": {
-        "description": "Optional. Set the data retention in the number of days for the Log Analytics Workspace. (Default: 30)"
+        "description": "Set the data retention in the number of days for the Log Analytics Workspace. (Default: 30)"
       },
       "minValue": 30,
       "maxValue": 720
@@ -311,7 +313,7 @@
       "type": "string",
       "defaultValue": "win11_22h2",
       "metadata": {
-        "description": "Optional. AVD OS image source. (Default: win11-22h2)"
+        "description": "AVD OS image source. (Default: win11-22h2)"
       },
       "allowedValues": [
         "win10_21h2",
@@ -328,28 +330,28 @@
       "type": "string",
       "defaultValue": "workload-admins@Contoso.com",
       "metadata": {
-        "description": "Optional. Team accountable for day-to-day operations. (Contoso-Ops)"
+        "description": "Team accountable for day-to-day operations. (Contoso-Ops)"
       }
     },
     "ownerTag": {
       "type": "string",
       "defaultValue": "workload-owner@Contoso.com",
       "metadata": {
-        "description": "Optional. Organizational owner of the AVD deployment. (Default: Contoso-Owner)"
+        "description": "Organizational owner of the AVD deployment. (Default: Contoso-Owner)"
       }
     },
     "rdpShortPathManagedNetworks": {
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Optional. Determine whether to enable RDP Short Path for Managed Networks. (Default: false)"
+        "description": "Determine whether to enable RDP Short Path for Managed Networks. (Default: false)"
       }
     },
     "resourceGroupCustomName": {
       "type": "string",
       "defaultValue": "rg-avd-use2-shared-services",
       "metadata": {
-        "description": "Optional. Custom name for Resource Group. (Default: rg-avd-use2-shared-services)"
+        "description": "Custom name for Resource Group. (Default: rg-avd-use2-shared-services)"
       },
       "maxLength": 90
     },
@@ -357,13 +359,13 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Optional. Determine whether to enable Screen Capture Protection. (Default: false)"
+        "description": "Determine whether to enable Screen Capture Protection. (Default: false)"
       }
     },
     "sharedServicesSubId": {
       "type": "string",
       "metadata": {
-        "description": "Required. AVD shared services subscription ID, multiple subscriptions scenario."
+        "description": "AVD shared services subscription ID, multiple subscriptions scenario."
       }
     },
     "time": {
@@ -377,14 +379,14 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Optional. Set to deploy Azure Image Builder to existing virtual network. (Default: false)"
+        "description": "Set to deploy Azure Image Builder to existing virtual network. (Default: false)"
       }
     },
     "userAssignedManagedIdentityCustomName": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Optional. Custom name for User Assigned Identity. (Default: id-avd)"
+        "description": "Custom name for User Assigned Identity. (Default: id-avd)"
       },
       "maxLength": 128
     },
@@ -392,7 +394,7 @@
       "type": "string",
       "defaultValue": "Contoso-Workload",
       "metadata": {
-        "description": "Optional. Reference to the size of the VM for your workloads (Default: Contoso-Workload)"
+        "description": "Reference to the size of the VM for your workloads (Default: Contoso-Workload)"
       }
     }
   },
@@ -898,8 +900,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "16670742080494531396"
+              "version": "0.18.4.5664",
+              "templateHash": "8823794279696588123"
             }
           },
           "parameters": {
@@ -1007,8 +1009,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "6601448312481874939"
+                      "version": "0.18.4.5664",
+                      "templateHash": "10196623923433376428"
                     }
                   },
                   "parameters": {
@@ -1137,8 +1139,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "10998474410748060366"
+                      "version": "0.18.4.5664",
+                      "templateHash": "12106659644963784818"
                     }
                   },
                   "parameters": {
@@ -1506,8 +1508,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "16122186640150451379"
+              "version": "0.18.4.5664",
+              "templateHash": "11642303938395689213"
             }
           },
           "parameters": {
@@ -1669,8 +1671,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "15136491551081535379"
+              "version": "0.18.4.5664",
+              "templateHash": "15737913196788172522"
             }
           },
           "parameters": {
@@ -1792,8 +1794,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "8490200634198428200"
+                      "version": "0.18.4.5664",
+                      "templateHash": "943002000979437913"
                     }
                   },
                   "parameters": {
@@ -1991,8 +1993,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "10569201387143117913"
+              "version": "0.18.4.5664",
+              "templateHash": "16771064281561658183"
             }
           },
           "parameters": {
@@ -2574,8 +2576,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "10569201387143117913"
+              "version": "0.18.4.5664",
+              "templateHash": "16771064281561658183"
             }
           },
           "parameters": {
@@ -3156,8 +3158,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "10219443869593469482"
+              "version": "0.18.4.5664",
+              "templateHash": "11092596112037938839"
             }
           },
           "parameters": {
@@ -3307,8 +3309,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "17881392384797905616"
+                      "version": "0.18.4.5664",
+                      "templateHash": "1014966362947711679"
                     }
                   },
                   "parameters": {
@@ -3479,8 +3481,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "7866928653938093582"
+                      "version": "0.18.4.5664",
+                      "templateHash": "6616363816775829410"
                     }
                   },
                   "parameters": {
@@ -3644,8 +3646,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "6101724627965478168"
+                              "version": "0.18.4.5664",
+                              "templateHash": "10136020642586052526"
                             }
                           },
                           "parameters": {
@@ -3850,8 +3852,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "12344894683059969559"
+                      "version": "0.18.4.5664",
+                      "templateHash": "10358685782947039492"
                     }
                   },
                   "parameters": {
@@ -4171,8 +4173,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "18259159649182855517"
+                              "version": "0.18.4.5664",
+                              "templateHash": "17996434110861104737"
                             }
                           },
                           "parameters": {
@@ -4434,8 +4436,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "12344894683059969559"
+              "version": "0.18.4.5664",
+              "templateHash": "10358685782947039492"
             }
           },
           "parameters": {
@@ -4755,8 +4757,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "18259159649182855517"
+                      "version": "0.18.4.5664",
+                      "templateHash": "17996434110861104737"
                     }
                   },
                   "parameters": {
@@ -4983,8 +4985,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "2447160534065661231"
+              "version": "0.18.4.5664",
+              "templateHash": "6694754263575522312"
             }
           },
           "parameters": {
@@ -5313,8 +5315,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "8502006900426185203"
+                      "version": "0.18.4.5664",
+                      "templateHash": "8264411614210174935"
                     }
                   },
                   "parameters": {
@@ -5515,8 +5517,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "9723296804992458231"
+              "version": "0.18.4.5664",
+              "templateHash": "8596842132721557367"
             }
           },
           "parameters": {
@@ -5909,8 +5911,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "1015616738226483875"
+                      "version": "0.18.4.5664",
+                      "templateHash": "16114201815220186510"
                     }
                   },
                   "parameters": {
@@ -6053,8 +6055,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "9976669288431551452"
+                      "version": "0.18.4.5664",
+                      "templateHash": "9475182064400951000"
                     }
                   },
                   "parameters": {
@@ -6187,8 +6189,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "3402933947779868845"
+                      "version": "0.18.4.5664",
+                      "templateHash": "4737981453812272169"
                     }
                   },
                   "parameters": {
@@ -6322,8 +6324,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "12988075953101096314"
+                      "version": "0.18.4.5664",
+                      "templateHash": "3112143349780297195"
                     }
                   },
                   "parameters": {
@@ -6494,8 +6496,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "3289166297924789550"
+                      "version": "0.18.4.5664",
+                      "templateHash": "123582376075481853"
                     }
                   },
                   "parameters": {
@@ -6641,8 +6643,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "18044483929875331860"
+                      "version": "0.18.4.5664",
+                      "templateHash": "16949430988646737619"
                     }
                   },
                   "parameters": {
@@ -6868,8 +6870,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "1145398762062008037"
+                      "version": "0.18.4.5664",
+                      "templateHash": "16367350850509170627"
                     }
                   },
                   "parameters": {
@@ -7037,8 +7039,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "15503229472224280826"
+                      "version": "0.18.4.5664",
+                      "templateHash": "4259405973831985687"
                     }
                   },
                   "parameters": {
@@ -7188,8 +7190,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "7352784420507326330"
+                      "version": "0.18.4.5664",
+                      "templateHash": "8241310064803100775"
                     }
                   },
                   "parameters": {
@@ -7399,8 +7401,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "6119857452463366145"
+              "version": "0.18.4.5664",
+              "templateHash": "14509232230386518393"
             }
           },
           "parameters": {
@@ -7759,8 +7761,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "14836176912748203966"
+              "version": "0.18.4.5664",
+              "templateHash": "3249564865106999262"
             }
           },
           "parameters": {
@@ -8155,8 +8157,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "8366751109583896336"
+                      "version": "0.18.4.5664",
+                      "templateHash": "15416397756518456448"
                     }
                   },
                   "parameters": {
@@ -8309,8 +8311,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "13406394459507111678"
+                      "version": "0.18.4.5664",
+                      "templateHash": "14604590533696605016"
                     }
                   },
                   "parameters": {
@@ -8502,8 +8504,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "12163571458643722289"
+                      "version": "0.18.4.5664",
+                      "templateHash": "16051834142336003966"
                     }
                   },
                   "parameters": {
@@ -8704,8 +8706,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "16452772057477579241"
+                      "version": "0.18.4.5664",
+                      "templateHash": "12862110680189461991"
                     }
                   },
                   "parameters": {
@@ -8853,8 +8855,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "1235777433401777242"
+                      "version": "0.18.4.5664",
+                      "templateHash": "8795514551875247591"
                     }
                   },
                   "parameters": {
@@ -8988,8 +8990,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "9976669288431551452"
+                      "version": "0.18.4.5664",
+                      "templateHash": "9475182064400951000"
                     }
                   },
                   "parameters": {
@@ -9127,8 +9129,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "15503229472224280826"
+                      "version": "0.18.4.5664",
+                      "templateHash": "4259405973831985687"
                     }
                   },
                   "parameters": {
@@ -9310,8 +9312,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "6722353615711085026"
+                      "version": "0.18.4.5664",
+                      "templateHash": "12520700622965517694"
                     }
                   },
                   "parameters": {
@@ -9781,8 +9783,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "7311288048246157848"
+                      "version": "0.18.4.5664",
+                      "templateHash": "12991773916541265724"
                     }
                   },
                   "parameters": {
@@ -9978,8 +9980,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "12718574346799900200"
+                              "version": "0.18.4.5664",
+                              "templateHash": "3520683536217550590"
                             }
                           },
                           "parameters": {
@@ -10113,8 +10115,8 @@
                           "metadata": {
                             "_generator": {
                               "name": "bicep",
-                              "version": "0.17.1.54307",
-                              "templateHash": "12287935360262920219"
+                              "version": "0.18.4.5664",
+                              "templateHash": "11724106538771429164"
                             }
                           },
                           "parameters": {
@@ -10327,8 +10329,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "10906766349971252171"
+                      "version": "0.18.4.5664",
+                      "templateHash": "10816931729941034087"
                     }
                   },
                   "parameters": {
@@ -10532,8 +10534,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "8366751109583896336"
+              "version": "0.18.4.5664",
+              "templateHash": "15416397756518456448"
             }
           },
           "parameters": {
@@ -10691,8 +10693,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "15934663861505974266"
+              "version": "0.18.4.5664",
+              "templateHash": "15997073878821839671"
             }
           },
           "parameters": {
@@ -10884,8 +10886,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "4157749080060500368"
+                      "version": "0.18.4.5664",
+                      "templateHash": "5736988143245776958"
                     }
                   },
                   "parameters": {
@@ -11231,8 +11233,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "1618388663552714884"
+              "version": "0.18.4.5664",
+              "templateHash": "8206590254478212861"
             }
           },
           "parameters": {
@@ -11454,8 +11456,8 @@
                   "metadata": {
                     "_generator": {
                       "name": "bicep",
-                      "version": "0.17.1.54307",
-                      "templateHash": "7140392159677904422"
+                      "version": "0.18.4.5664",
+                      "templateHash": "9864326242210351121"
                     }
                   },
                   "parameters": {

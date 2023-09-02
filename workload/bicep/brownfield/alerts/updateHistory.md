@@ -2,9 +2,41 @@
 
 [Home](./readme.md) | [PostDeployment](./postDeploy.md) | [How to Change Thresholds](./changeAlertThreshold.md) | [Alert Reference](./alertReference.md) | [Excel List of Alert Rules](./references/alerts.xlsx)
 
-## 6/19/23 - Initial AVD Accelerator Release (v2.0.1)
+## 8/10/23 - Fix - Deployment Name too long Host Pool Alerts (V2.1.1)
 
-- Removed conditional for Service Health alerts whereas they would not deploy for Azure US Government.  (Given they are now available)
+- Added logic to truncate Host Pool name when deploying Host Pool specific alerts to last 25 characters to prevent deployment name over allowed 64 characters
+- Ensured Actual Host Pool Name is in Description Name for related alerts.
+
+## 7/17/23 - Fixes - Remove Deployment Script (v2.1.0)
+
+- Removed Identity and Deployment script for VM to Host Pool mapping
+    - should fix API limit issue #392
+    - should fix issue 379 regarding use of Private Endpoints on host pools given no Deployment Script Container used
+- Updated Custom UI to now have flag for mapping VM RG to HostPool(s) or use single RG for VMs and AVD resources
+- Fix typo on alert StorAzFilesAvailBlw-99-Prcnt for windowsSize (55M vs 5M) which would fail deployment (Issue 425)
+- Reverted Custom UI for Log Analytics Selection back to type which allows cross subscription selection (Was API now Resource Selection component)
+- New Option for allowing All Alerts to Auto-Resolve
+- Environment (Production, Dev, Test) letter now at the end of the alert names
+- Added Current Version to Alerts Readme Summary section for awareness and easier tracking
+
+## 7/10/23 - Additional Alerts Added and Minor fixes (v2.0.2)
+
+These have been added and as usual deployed 'disabled' and duplicated for each Host Pool.
+- New Alert: Sev1 Personal Host Pool VM assigned but AVD Agent reporting unhealthy (Log Query)
+- New Alert: Sev1 Critical Updates Mising on VM (Log Query)
+- New Alert: Sev3 User Connection Failed (Log Query)
+- New Alert: Sev1 OS Disk Average Consumed Bandwidth at or over 95% (Metric)
+- New Alert: Sev2 OS Disk Average Consumed Bandwidth at or over 85% (Metric)
+
+Deployment names truncated to prevent deployment failures for names over 64 characters
+- mainly noted the Storage Latency alerts were impacted when the storage account name was long
+
+Fixed Single Selection Issue
+- Form UI would put single selections for Host Pool and VM RGs as string versus array value(s) 
+- Added Default value for those sections with "[]"
+
+Deployment Script (dsHostPoolVMMap.ps1) added error handling (try catch)
+
 
 ## 4/27/23 - Initial AVD Accelerator Release (v2.0.1)
 

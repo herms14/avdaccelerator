@@ -56,6 +56,9 @@
         "avdHostPoolType": {
             "value": "Pooled"
         },
+        "hostPoolPreferredAppGroupType": {
+            "value": "Desktop"
+        },
         "avdPersonalAssignType": {
             "value": "Automatic"
         },
@@ -67,9 +70,6 @@
         },
         "avdStartVmOnConnect": {
             "value": true
-        },
-        "avdDeployRappGroup": {
-            "value": false
         },
         "avdHostPoolRdpProperties": {
             "value": "audiocapturemode:i:1;audiomode:i:0;drivestoredirect:s:;redirectclipboard:i:1;redirectcomports:i:1;redirectprinters:i:1;redirectsmartcards:i:1;screen mode id:i:2"
@@ -120,10 +120,10 @@
             "value": false
         },
         "fslogixFileShareQuotaSize": {
-            "value": 10
+            "value": 1
         },
         "msixFileShareQuotaSize": {
-            "value": 10
+            "value": 1
         },
         "avdDeploySessionHosts": {
             "value": true
@@ -134,13 +134,16 @@
         "avdSessionHostCountIndex": {
             "value": 0
         },
-        "avdUseAvailabilityZones": {
+        "availabilityZonesCompute": {
             "value": true
         },
-        "avdAsFaultDomainCount": {
+        "zoneRedundantStorage": {
+            "value": false
+        },
+        "avsetFaultDomainCount": {
             "value": 2
         },
-        "avdAsUpdateDomainCount": {
+        "avsetUpdateDomainCount": {
             "value": 5
         },
         "fslogixStoragePerformance": {
@@ -158,14 +161,17 @@
         "avdOsImage": {
             "value": "win11_21h2"
         },
+        "managementVmOsImage": {
+            "value": "winServer_2022_Datacenter_smalldisk_g2"
+        },
         "securityType": {
-            "value": "Standard"
+            "value": "TrustedLaunch"
         },
         "secureBootEnabled": {
-            "value": false
+            "value": true
         },
         "vTpmEnabled": {
-            "value": false
+            "value": true
         },
         "useSharedImage": {
             "value": false

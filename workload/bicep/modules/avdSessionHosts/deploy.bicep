@@ -4,246 +4,424 @@ targetScope = 'subscription'
 // Parameters //
 // ========== //
 
-@description('AVD disk encryption set resource ID to enable server side encyption.')
+@sys.description('AVD disk encryption set resource ID to enable server side encyption.')
 param diskEncryptionSetResourceId string
 
-@description('AVD subnet ID.')
+@sys.description('AVD subnet ID.')
 param subnetId string
 
-@description('Location where to deploy compute services.')
-param sessionHostLocation string
+@sys.description('Location where to deploy compute services.')
+param location string
 
-@description('Virtual machine time zone.')
-param computeTimeZone string
+@sys.description('Virtual machine time zone.')
+param timeZone string
 
-@description('AVD Session Host prefix.')
-param sessionHostNamePrefix string
+@sys.description('General session host batch identifier')
+param batchId int
 
-@description('Resource Group name for the session hosts.')
+@sys.description('AVD Session Host prefix.')
+param namePrefix string
+
+@sys.description('Resource Group name for the session hosts.')
 param computeObjectsRgName string
 
-@description('Name of AVD service objects RG.')
+@sys.description('Name of AVD service objects RG.')
 param serviceObjectsRgName string
 
-@description('AVD workload subscription ID, multiple subscriptions scenario.')
+@sys.description('AVD workload subscription ID, multiple subscriptions scenario.')
 param subscriptionId string
 
-@description('Quantity of session hosts to deploy.')
-param deploySessionHostsCount int
+@sys.description('Quantity of session hosts to deploy.')
+param count int
 
-@description('The session host number to begin with for the deployment.')
-param sessionHostCountIndex int
+@sys.description('Max VMs per availability set.')
+param maxAvsetMembersCount int
 
-@description('Creates an availability zone and adds the VMs to it. Cannot be used in combination with availability set nor scale set.')
+@sys.description('The session host number to begin with for the deployment.')
+param countIndex int
+
+@sys.description('Creates an availability zone and adds the VMs to it. Cannot be used in combination with availability set nor scale set.')
 param useAvailabilityZones bool
 
-@description('Availablity Set name.')
-param availabilitySetNamePrefix string
+@sys.description('Availablity Set name.')
+param avsetNamePrefix string
 
-@description('Sets the number of fault domains for the availability set.')
-param availabilitySetFaultDomainCount int
-
-@description('Sets the number of update domains for the availability set.')
-param availabilitySetUpdateDomainCount int
-
-@description('Create VM GPU extension policies.')
-param deployGpuPolicies bool
-
-@description('Required, The service providing domain services for Azure Virtual Desktop.')
+@sys.description('Required, The service providing domain services for Azure Virtual Desktop.')
 param identityServiceProvider string
 
-@description('Required, Eronll session hosts on Intune.')
+@sys.description('Required, Eronll session hosts on Intune.')
 param createIntuneEnrollment bool
 
-@description('This property can be used by user in the request to enable or disable the Host Encryption for the virtual machine. This will enable the encryption for all the disks including Resource/Temp disk at host itself. For security reasons, it is recommended to set encryptionAtHost to True. Restrictions: Cannot be enabled if Azure Disk Encryption (guest-VM encryption using bitlocker/DM-Crypt) is enabled on your VMs.')
+@sys.description('This property can be used by user in the request to enable or disable the Host Encryption for the virtual machine. This will enable the encryption for all the disks including Resource/Temp disk at host itself. For security reasons, it is recommended to set encryptionAtHost to True. Restrictions: Cannot be enabled if Azure Disk Encryption (guest-VM encryption using bitlocker/DM-Crypt) is enabled on your VMs.')
 param encryptionAtHost bool
 
-@description('Session host VM size.')
-param sessionHostsSize string
+@sys.description('Session host VM size.')
+param size string
 
-@description('Enables accelerated Networking on the session hosts.')
+@sys.description('Enables accelerated Networking on the session hosts.')
 param enableAcceleratedNetworking bool
 
-@description('Specifies the securityType of the virtual machine. Must be TrustedLaunch or ConfidentialVM enable UefiSettings.')
+@sys.description('Specifies the securityType of the virtual machine. Must be TrustedLaunch or ConfidentialVM enable UefiSettings.')
 param securityType string
 
-@description('Specifies whether secure boot should be enabled on the virtual machine. This parameter is part of the UefiSettings. securityType should be set to TrustedLaunch to enable UefiSettings.')
+@sys.description('Specifies whether secure boot should be enabled on the virtual machine. This parameter is part of the UefiSettings. securityType should be set to TrustedLaunch to enable UefiSettings.')
 param secureBootEnabled bool
 
-@description('Specifies whether virtual TPM should be enabled on the virtual machine. This parameter is part of the UefiSettings.  securityType should be set to TrustedLaunch to enable UefiSettings.')
+@sys.description('Specifies whether virtual TPM should be enabled on the virtual machine. This parameter is part of the UefiSettings.  securityType should be set to TrustedLaunch to enable UefiSettings.')
 param vTpmEnabled bool
 
-@description('OS disk type for session host.')
-param sessionHostDiskType string
+@sys.description('OS disk type for session host.')
+param diskType string
 
-@description('Market Place OS image.')
+@sys.description('Market Place OS image.')
 param marketPlaceGalleryWindows object
 
-@description('Set to deploy image from Azure Compute Gallery.')
+@sys.description('Set to deploy image from Azure Compute Gallery.')
 param useSharedImage bool
 
-@description('Source custom image ID.')
+@sys.description('Source custom image ID.')
 param avdImageTemplateDefinitionId string
 
-@description('Storage Managed Identity Resource ID.')
+@sys.description('Storage Managed Identity Resource ID.')
 param storageManagedIdentityResourceId string
 
-@description('Local administrator username.')
+@sys.description('Local administrator username.')
 param vmLocalUserName string
 
-@description('Name of keyvault that contains credentials.')
+@sys.description('Name of keyvault that contains credentials.')
 param wrklKvName string
 
-@description('AD domain name.')
+@sys.description('AD domain name.')
 param identityDomainName string
 
-@description('AVD session host domain join credentials.')
+@sys.description('AVD session host domain join credentials.')
 param domainJoinUserName string
 
-@description('OU path to join AVd VMs.')
+@sys.description('OU path to join AVd VMs.')
 param sessionHostOuPath string
 
-@description('Application Security Group (ASG) for the session hosts.')
-param applicationSecurityGroupResourceId string
+@sys.description('Application Security Group (ASG) for the session hosts.')
+param asgResourceId string
 
-@description('AVD Host Pool name.')
+@sys.description('AVD Host Pool name.')
 param hostPoolName string
 
-@description('Location for the AVD agent installation package.')
+@sys.description('Location for the AVD agent installation package.')
 param avdAgentPackageLocation string
 
-@description('Deploy Fslogix setup.')
+@sys.description('Deploy Fslogix setup.')
 param createAvdFslogixDeployment bool
 
-@description('FSlogix configuration script file name.')
-param fsLogixScript string
+@sys.description('FSlogix configuration script file name.')
+param fslogixScript string
 
-@description('Configuration arguments for FSlogix.')
-param fsLogixScriptArguments string
+@sys.description('Configuration arguments for FSlogix.')
+param fslogixScriptArguments string
 
-@description('Path for the FSlogix share.')
+@sys.description('Path for the FSlogix share.')
 param fslogixSharePath string
 
-@description('URI for FSlogix configuration script.')
+@sys.description('URI for FSlogix configuration script.')
 param fslogixScriptUri string
 
-@description('Tags to be applied to resources')
+@sys.description('Tags to be applied to resources')
 param tags object
 
-@description('Log analytics workspace for diagnostic logs.')
+@sys.description('Log analytics workspace for diagnostic logs.')
 param alaWorkspaceResourceId string
 
-@description('Diagnostic logs retention.')
+@sys.description('Diagnostic logs retention.')
 param diagnosticLogsRetentionInDays int
 
-@description('Deploy AVD monitoring resources and setings. (Default: true)')
+@sys.description('Deploy AVD monitoring resources and setings. (Default: true)')
 param deployMonitoring bool
 
-@description('Do not modify, used to set unique value for resource deployment.')
+@sys.description('Do not modify, used to set unique value for resource deployment.')
 param time string = utcNow()
 
 // =========== //
 // Variable declaration //
 // =========== //
-var varMaxSessionHostsPerTemplateDeployment = 30 // max number of session hosts that can be deployed from the avd-session-hosts.bicep file in each batch / for loop. Math: (800 - <Number of Static Resources>) / <Number of Looped Resources> 
-var varDivisionValue = deploySessionHostsCount / varMaxSessionHostsPerTemplateDeployment // This determines if any full batches are required.
-var varDivisionRemainderValue = deploySessionHostsCount % varMaxSessionHostsPerTemplateDeployment // This determines if any partial batches are required.
-var varAvdSessionHostBatchCount = varDivisionRemainderValue > 0 ? varDivisionValue + 1 : varDivisionValue // This determines the total number of batches needed, whether full and / or partial.
-var maxAvailabilitySetMembersCount = 199 // This is the max number of session hosts that can be deployed in an availability set.
-var divisionAvSetValue = deploySessionHostsCount / maxAvailabilitySetMembersCount // This determines if any full availability sets are required.
-var divisionAvSetRemainderValue = deploySessionHostsCount % maxAvailabilitySetMembersCount // This determines if any partial availability sets are required.
-var availabilitySetCount = divisionAvSetRemainderValue > 0 ? divisionAvSetValue + 1 : divisionAvSetValue // This determines the total number of availability sets needed, whether full and / or partial.
-
+var varAllAvailabilityZones = pickZones('Microsoft.Compute', 'virtualMachines', location, 3)
+var varNicDiagnosticMetricsToEnable = [
+    'AllMetrics'
+  ]
+var varManagedDisk = empty(diskEncryptionSetResourceId) ? {
+    storageAccountType: diskType
+} : {
+    diskEncryptionSet: {
+        id: diskEncryptionSetResourceId
+    }
+    storageAccountType: diskType
+}
 // =========== //
 // Deployments //
 // =========== //
-
-// Call on the hotspool.
-resource getHostPool 'Microsoft.DesktopVirtualization/hostPools@2019-12-10-preview' existing = {
+// Call on the hotspool
+resource hostPool 'Microsoft.DesktopVirtualization/hostPools@2019-12-10-preview' existing = {
   name: hostPoolName
   scope: resourceGroup('${subscriptionId}', '${serviceObjectsRgName}')
 }
 
-// Availability set.
-module availabilitySet './.bicep/availabilitySets.bicep' = if (!useAvailabilityZones) {
-  name: 'AVD-Availability-Set-${time}'
-  scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
-  params: {
-      workloadSubsId: subscriptionId
-      computeObjectsRgName: computeObjectsRgName
-      availabilitySetNamePrefix: availabilitySetNamePrefix
-      sessionHostLocation: sessionHostLocation
-      availabilitySetCount: availabilitySetCount
-      availabilitySetFaultDomainCount: availabilitySetFaultDomainCount
-      availabilitySetUpdateDomainCount: availabilitySetUpdateDomainCount
-      tags: tags
-  }
+// call on the keyvault
+resource keyVault 'Microsoft.KeyVault/vaults@2021-06-01-preview' existing = if (identityServiceProvider != 'AAD') {
+  name: wrklKvName
+  scope: resourceGroup('${subscriptionId}', '${serviceObjectsRgName}')
 }
 
-// Session hosts.
-@batchSize(1)
-module sessionHosts './.bicep/avdSessionHosts.bicep' = [for i in range(1, varAvdSessionHostBatchCount): {
+// Session hosts
+module sessionHosts '../../../../carml/1.3.0/Microsoft.Compute/virtualMachines/deploy.bicep' = [for i in range(1, count): {
   scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
-  name: 'AVD-SH-Batch-${i-1}-${time}'
+  name: 'SH-${batchId}-${i-1}-${time}'
   params: {
-    diskEncryptionSetResourceId: diskEncryptionSetResourceId 
-    avdAgentPackageLocation: avdAgentPackageLocation
-    timeZone: computeTimeZone
-    applicationSecurityGroupResourceId: applicationSecurityGroupResourceId
-    availabilitySetNamePrefix: availabilitySetNamePrefix
-    maxAvailabilitySetMembersCount: maxAvailabilitySetMembersCount
-    computeObjectsRgName: computeObjectsRgName
-    domainJoinUserName: domainJoinUserName
-    wrklKvName: wrklKvName
-    serviceObjectsRgName: serviceObjectsRgName
-    hostPoolName: hostPoolName
-    identityDomainName: identityDomainName
-    imageTemplateDefinitionId: avdImageTemplateDefinitionId
-    sessionHostOuPath: sessionHostOuPath
-    sessionHostsCount: i == varAvdSessionHostBatchCount && varDivisionRemainderValue > 0 ? varDivisionRemainderValue : varMaxSessionHostsPerTemplateDeployment
-    sessionHostCountIndex: i == 1 ? sessionHostCountIndex : (((i - 1) * varMaxSessionHostsPerTemplateDeployment) + sessionHostCountIndex)
-    sessionHostDiskType: sessionHostDiskType
-    sessionHostLocation: sessionHostLocation
-    sessionHostNamePrefix: sessionHostNamePrefix
-    sessionHostsSize: sessionHostsSize
-    enableAcceleratedNetworking: enableAcceleratedNetworking
-    securityType: securityType
-    secureBootEnabled: secureBootEnabled
-    vTpmEnabled: vTpmEnabled
-    subnetId: subnetId
-    useAvailabilityZones: useAvailabilityZones
-    vmLocalUserName: vmLocalUserName
-    subscriptionId: subscriptionId
-    encryptionAtHost: encryptionAtHost
-    createAvdFslogixDeployment: createAvdFslogixDeployment
-    storageManagedIdentityResourceId: storageManagedIdentityResourceId
-    fsLogixScriptFile: fsLogixScript
-    fsLogixScriptArguments: fsLogixScriptArguments
-    fslogixSharePath: fslogixSharePath
-    fslogixScriptUri: fslogixScriptUri
-    hostPoolToken: getHostPool.properties.registrationInfo.token
-    marketPlaceGalleryWindows: marketPlaceGalleryWindows
-    useSharedImage: useSharedImage
-    identityServiceProvider: identityServiceProvider
-    createIntuneEnrollment: createIntuneEnrollment
-    tags: tags
-    deployMonitoring: deployMonitoring
-    alaWorkspaceResourceId: alaWorkspaceResourceId
-    diagnosticLogsRetentionInDays: diagnosticLogsRetentionInDays
+      name: '${namePrefix}${padLeft((i + countIndex), 4, '0')}'
+      location: location
+      timeZone: timeZone
+      userAssignedIdentities: createAvdFslogixDeployment ? {
+          '${storageManagedIdentityResourceId}': {}
+      } : {}
+      systemAssignedIdentity: (identityServiceProvider == 'AAD') ? true: false
+      availabilityZone: useAvailabilityZones ? take(skip(varAllAvailabilityZones, i % length(varAllAvailabilityZones)), 1) : []
+      encryptionAtHost: encryptionAtHost
+      availabilitySetResourceId: useAvailabilityZones ? '' : '/subscriptions/${subscriptionId}/resourceGroups/${computeObjectsRgName}/providers/Microsoft.Compute/availabilitySets/${avsetNamePrefix}-${padLeft(((1 + (i + countIndex) / maxAvsetMembersCount)), 3, '0')}'
+      osType: 'Windows'
+      licenseType: 'Windows_Client'
+      vmSize: size
+      securityType: securityType
+      secureBootEnabled: secureBootEnabled
+      vTpmEnabled: vTpmEnabled
+      imageReference: useSharedImage ? json('{\'id\': \'${avdImageTemplateDefinitionId}\'}') : marketPlaceGalleryWindows
+      osDisk: {
+          createOption: 'fromImage'
+          deleteOption: 'Delete'
+          diskSizeGB: 128
+          managedDisk: varManagedDisk
+      }
+      adminUsername: vmLocalUserName
+      adminPassword: keyVault.getSecret('vmLocalUserPassword')
+      nicConfigurations: [
+          {
+              nicSuffix: 'nic-01-'
+              deleteOption: 'Delete'
+              enableAcceleratedNetworking: enableAcceleratedNetworking
+              ipConfigurations: !empty(asgResourceId) ? [
+                  {
+                      name: 'ipconfig01'
+                      subnetResourceId: subnetId
+                      applicationSecurityGroups: [
+                          {
+                              id: asgResourceId
+                          }
+                      ] 
+                  }
+              ] : [
+                  {
+                      name: 'ipconfig01'
+                      subnetResourceId: subnetId
+                  }
+              ]
+          }
+      ]
+      // ADDS or AADDS domain join.
+      extensionDomainJoinPassword: keyVault.getSecret('domainJoinUserPassword')
+      extensionDomainJoinConfig: {
+          enabled: (identityServiceProvider == 'AAD') ? false: true
+          settings: {
+              name: identityDomainName
+              ouPath: !empty(sessionHostOuPath) ? sessionHostOuPath : null
+              user: domainJoinUserName
+              restart: 'true'
+              options: '3'
+          }
+      }
+      // Azure AD (AAD) Join.
+      extensionAadJoinConfig: {
+          enabled: (identityServiceProvider == 'AAD') ? true: false
+          settings: createIntuneEnrollment ? {
+              mdmId: '0000000a-0000-0000-c000-000000000000'
+          }: {}
+      }
+      nicdiagnosticMetricsToEnable: deployMonitoring ? varNicDiagnosticMetricsToEnable : []
+      diagnosticWorkspaceId: deployMonitoring ? alaWorkspaceResourceId : ''
+      diagnosticLogsRetentionInDays: diagnosticLogsRetentionInDays
+      tags: tags
   }
   dependsOn: [
-    availabilitySet
+    keyVault
   ]
 }]
 
-// VM GPU extension policies.
-module gpuPolicies './.bicep/azurePolicyGpuExtensions.bicep' = if (deployGpuPolicies) {
-  scope: subscription('${subscriptionId}')
-  name: 'GPU-VM-Extensions-${time}'
+// Introduce wait for session hosts to be ready
+module sessionHostsWait '../../../../carml/1.3.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = {
+  scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
+  name: 'SH-Wait-${batchId}-${time}'
   params: {
-    computeObjectsRgName: computeObjectsRgName
-    location: sessionHostLocation
-    subscriptionId: subscriptionId
+      name: 'SH-Wait-${batchId}-${time}'
+      location: location
+      azPowerShellVersion: '9.7'
+      cleanupPreference: 'Always'
+      timeout: 'PT10M'
+      retentionInterval: 'PT1H'
+      scriptContent: '''
+      Write-Host "Start"
+      Get-Date
+      Start-Sleep -Seconds 60
+      Write-Host "Stop"
+      Get-Date
+      '''
   }
-  dependsOn: []
+  dependsOn: [
+      sessionHosts
+  ]
 }
+
+// Add antimalware extension to session host.
+module sessionHostsAntimalwareExtension '../../../../carml/1.3.0/Microsoft.Compute/virtualMachines/extensions/deploy.bicep' = [for i in range(1, count): {
+  scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
+  name: 'SH-Antimal-${batchId}-${i-1}-${time}'
+  params: {
+      location: location
+      virtualMachineName: '${namePrefix}${padLeft((i + countIndex), 4, '0')}'
+      name: 'MicrosoftAntiMalware'
+      publisher: 'Microsoft.Azure.Security'
+      type: 'IaaSAntimalware'
+      typeHandlerVersion: '1.3'
+      autoUpgradeMinorVersion: true
+      enableAutomaticUpgrade: false
+      settings: {
+          AntimalwareEnabled: true
+          RealtimeProtectionEnabled: 'true'
+          ScheduledScanSettings: {
+              isEnabled: 'true'
+              day: '7' // Day of the week for scheduled scan (1-Sunday, 2-Monday, ..., 7-Saturday)
+              time: '120' // When to perform the scheduled scan, measured in minutes from midnight (0-1440). For example: 0 = 12AM, 60 = 1AM, 120 = 2AM.
+              scanType: 'Quick' //Indicates whether scheduled scan setting type is set to Quick or Full (default is Quick)
+          }
+          Exclusions: createAvdFslogixDeployment ? {
+              Extensions: '*.vhd;*.vhdx'
+              Paths: '"%ProgramFiles%\\FSLogix\\Apps\\frxdrv.sys;%ProgramFiles%\\FSLogix\\Apps\\frxccd.sys;%ProgramFiles%\\FSLogix\\Apps\\frxdrvvt.sys;%TEMP%\\*.VHD;%TEMP%\\*.VHDX;%Windir%\\TEMP\\*.VHD;%Windir%\\TEMP\\*.VHDX;${fslogixSharePath}\\*\\*.VHD;${fslogixSharePath}\\*\\*.VHDX'
+              Processes: '%ProgramFiles%\\FSLogix\\Apps\\frxccd.exe;%ProgramFiles%\\FSLogix\\Apps\\frxccds.exe;%ProgramFiles%\\FSLogix\\Apps\\frxsvc.exe'
+          } : {}
+      }
+      enableDefaultTelemetry: false
+  }
+  dependsOn: [
+      sessionHostsWait
+  ]
+}]
+
+// Introduce wait for antimalware extension to complete to be ready
+module antimalwareExtensionWait '../../../../carml/1.3.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = {
+  scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
+  name: 'SH-Antimal-Wait-${batchId}-${time}'
+  params: {
+    name: 'SH-Antimal-Wait-${batchId}-${time}'
+    location: location
+    azPowerShellVersion: '9.7'
+    cleanupPreference: 'Always'
+    timeout: 'PT10M'
+    retentionInterval: 'PT1H'
+    scriptContent: '''
+    Write-Host "Start"
+    Get-Date
+    Start-Sleep -Seconds 60
+    Write-Host "Stop"
+    Get-Date
+    '''
+  }
+  dependsOn: [
+      sessionHostsAntimalwareExtension
+  ]
+}
+
+// Call to the ALA workspace
+resource alaWorkspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = if (!empty(alaWorkspaceResourceId) && deployMonitoring) {
+  scope: az.resourceGroup(split(alaWorkspaceResourceId, '/')[2], split(alaWorkspaceResourceId, '/')[4])
+  name: last(split(alaWorkspaceResourceId, '/'))!
+}
+
+// Add monitoring extension to session host
+module monitoring '../../../../carml/1.3.0/Microsoft.Compute/virtualMachines/extensions/deploy.bicep' = [for i in range(1, count): if (deployMonitoring) {
+  scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
+  name: 'SH-Mon-${batchId}-${i-1}-${time}'
+  params: {
+      location: location
+      virtualMachineName: '${namePrefix}${padLeft((i + countIndex), 4, '0')}'
+      name: 'MicrosoftMonitoringAgent'
+      publisher: 'Microsoft.EnterpriseCloud.Monitoring'
+      type: 'MicrosoftMonitoringAgent'
+      typeHandlerVersion: '1.0'
+      autoUpgradeMinorVersion: true
+      enableAutomaticUpgrade: false
+      settings: {
+        workspaceId: !empty(alaWorkspaceResourceId) ? reference(alaWorkspace.id, alaWorkspace.apiVersion).customerId : ''
+      }
+      protectedSettings: {
+        workspaceKey: !empty(alaWorkspaceResourceId) ? alaWorkspace.listKeys().primarySharedKey: ''
+      }
+      enableDefaultTelemetry: false
+  }
+  dependsOn: [
+      antimalwareExtensionWait
+      alaWorkspace
+  ]
+}]
+
+// Introduce wait for antimalware extension to complete to be ready
+module sessionHostsMonitoringWait '../../../../carml/1.3.0/Microsoft.Resources/deploymentScripts/deploy.bicep' = if (deployMonitoring) {
+  scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
+  name: 'SH-Mon-Wait-${batchId}-${time}' 
+  params: {
+    name: 'SH-Mon-Wait-${batchId}-${time}' 
+    location: location
+    azPowerShellVersion: '9.7'
+    cleanupPreference: 'Always'
+    timeout: 'PT10M'
+    retentionInterval: 'PT1H'
+    scriptContent: '''
+    Write-Host "Start"
+    Get-Date
+    Start-Sleep -Seconds 60
+    Write-Host "Stop"
+    Get-Date
+    '''
+  }
+  dependsOn: [
+      monitoring
+  ]
+}
+
+// Add the registry keys for Fslogix. Alternatively can be enforced via GPOs
+module configureFsLogixAvdHosts '.bicep/configureFslogixOnSessionHosts.bicep' = [for i in range(1, count): if (createAvdFslogixDeployment) {
+  scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
+  name: 'Fsl-Conf-${batchId}-${i-1}-${time}'
+  params: {
+      location: location
+      name: '${namePrefix}${padLeft((i + countIndex), 4, '0')}'
+      file: fslogixScript
+      fsLogixScriptArguments: fslogixScriptArguments
+      baseScriptUri: fslogixScriptUri
+  }
+  dependsOn: [
+      sessionHosts
+      sessionHostsMonitoringWait
+  ]
+}]
+
+// Add session hosts to AVD Host pool
+module addAvdHostsToHostPool '.bicep/registerSessionHostsOnHopstPool.bicep' = [for i in range(1, count): {
+  scope: resourceGroup('${subscriptionId}', '${computeObjectsRgName}')
+  name: 'HP-Join-${batchId}-${i}-${time}'
+  params: {
+      location: location
+      hostPoolToken: hostPool.properties.registrationInfo.token
+      name: '${namePrefix}${padLeft((i + countIndex), 4, '0')}'
+      hostPoolName: hostPoolName
+      avdAgentPackageLocation: avdAgentPackageLocation
+  }
+  dependsOn: [
+      sessionHosts
+      sessionHostsMonitoringWait
+      configureFsLogixAvdHosts
+  ]
+}]
